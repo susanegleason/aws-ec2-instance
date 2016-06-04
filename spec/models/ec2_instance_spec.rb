@@ -5,6 +5,32 @@ describe Ec2Instance do
     Aws.config.update(stub_responses: true)
   end
 
+  describe '.list' do
+    context 'given an instance is defined' do
+      it 'returns a list with info of one instance' do
+        Aws.config[:ec2] = instance_exists_stub
+
+        instance = Ec2Instance.new(id: 'id-exists', region: 'us-east-1')
+        instance_list = instance.list
+
+        expect(instance_list[0]['Instance id']).to be
+        expect(instance_list[0]['Instance name']).to be
+        expect(instance_list[0]['State']).to be
+      end
+    end
+
+    context 'given there are no instances defined' do
+      it 'returns an empty array' do
+        Aws.config[:ec2] = instance_does_not_exist_stub
+
+        instance = Ec2Instance.new(id: 'id-not-exist', region: 'us-east-1')
+        instance_list = instance.list
+
+        expect(instance_list).to be_empty
+      end
+    end
+  end
+
   describe '.description' do
     context 'given an existing instance' do
       it 'returns instance description' do

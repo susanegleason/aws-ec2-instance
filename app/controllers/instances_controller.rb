@@ -1,5 +1,13 @@
 class InstancesController < ApplicationController
 
+  def index
+    ec2_instance = Ec2Instance.new(region: 'us-east-1')
+    @list = ec2_instance.list
+    if @list.nil?
+      flash.now[:error] = "No instances defined"
+    end
+  end
+
   def show
     @id = params[:id]
     ec2_instance = Ec2Instance.new(id: @id)

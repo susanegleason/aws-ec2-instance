@@ -6,6 +6,19 @@ class Ec2Instance
     @ec2 = Aws::EC2::Client.new(region: region)
   end
 
+  def list
+    instance_list = []
+    if client_resp = ec2.describe_instances
+      client_resp.reservations.each do |instance|
+        instance_list << {
+          'Instance id' => instance.instances[0].instance_id,
+          'Instance name' => instance_name(instance.instances[0]),
+          'State' => instance.instances[0].state.name }
+      end
+    end
+    instance_list
+  end
+
   def details
     if instance_response = description
       build_instance_details(instance_response)
@@ -49,15 +62,21 @@ class Ec2Instance
 
   private
 
-  def build_instance_details(response)
-    { 'Instance id' => response.instance_id,
-      'Instance name' => response.tags[0].value,
-      'Instance type' => response.instance_type,
-      'State' => response.state.name,
-      'Public DNS' => response.public_dns_name,
-      'Public IP' => response.public_ip_address,
-      'Private DNS' => response.private_dns_name,
-      'Private IP' => response.private_ip_address }
+  def build_instance_details(instance)
+    { 'Instance id' => instance.instance_id,
+      'Instance name' => instance_name(instance),
+      'Instance type' => instance.instance_type,
+      'State' => instance.state.name,
+      'Public DNS' => instance.public_dns_name,
+      'Public IP' => instance.public_ip_address,
+      'Private DNS' => instance.private_dns_name,
+      'Private IP' => instance.private_ip_address }
+  end
+
+  def instance_name(instance)
+    instance.tags.each do |tag|
+      return tag.value if tag.key == 'Name'
+    end
   end
 
   def region

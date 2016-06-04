@@ -1,0 +1,25 @@
+<div>
+  <h3>EC2 Instances</h3>
+
+  <% if @list %>
+    <table>
+      <tbody>
+        <tr>
+          <th>Instance id</th>
+          <th>Name</th>
+          <th>State</th>
+        </tr>
+        <% @list.each do |instance| %>
+          <tr >
+            <td><%= instance['Instance id'] %></td>
+            <td><%= instance['Instance name'] %></td>
+            <td><%= instance['State'] %></td>
+            <td><%= link_to 'Show', instance_url(instance['Instance id']) %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <br><%= link_to "Refresh", instances_url(@id) %>
+  <% end %>
+
+</div>
