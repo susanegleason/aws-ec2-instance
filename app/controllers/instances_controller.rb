@@ -21,13 +21,15 @@ class InstancesController < ApplicationController
   def start
     @id = params[:instance_id]
     ec2_instance = Ec2Instance.new(id: @id)
-    redirect_to instance_url(@id), notice: ec2_instance.start
+    flash[:success] = ec2_instance.start
+    redirect_to instance_url(@id)
   end
 
   def stop
     @id = params[:instance_id]
     ec2_instance = Ec2Instance.new(id: @id)
-    redirect_to instance_url(@id), notice: ec2_instance.stop
+    flash[:success] = ec2_instance.stop
+    redirect_to instance_url(@id)
   end
 
 end

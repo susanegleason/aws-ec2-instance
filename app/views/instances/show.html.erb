@@ -1,8 +1,8 @@
 <div>
-  <h3>E2 Instance: <%= @id %></h3>
+  <h4>E2 Instance: <%= @id %></h4>
 
   <% if @details %>
-    <table>
+    <table class = 'table-condensed'>
       <tbody>
         <% @details.each do |key, value| %>
         <tr >
@@ -12,11 +12,12 @@
         <% end %>
       </tbody>
     </table>
-    <br><%= link_to "Refresh", instance_url(@id) %>
-    <br><%= link_to "Start Instance", instance_start_url(@id) %>
-    <br><%= link_to "Stop Instance", instance_stop_url(@id) %>
     <br>
-    <br><%= link_to "Back to List", instances_url %>
+    <%= link_to "Start Instance", instance_start_url(@id), class: 'btn btn-default' %>
+    <%= link_to "Stop Instance", instance_stop_url(@id), class: 'btn btn-default' %>
+    <%= link_to "Refresh", instance_url(@id), class: 'btn btn-default' %>
+    <br>
+    <br><%= link_to "Back to List", instances_url, class: 'btn btn-default' %>
   <% end %>
 
 </div>
